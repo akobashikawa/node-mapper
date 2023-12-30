@@ -11,14 +11,39 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
+  <style>
+    .node {
+      padding: 0.5em;
+      border-radius: 0.3em;
+      background-image: linear-gradient(#efe 0%, #dfd 100%);
+    }
+
+    .relation {
+      padding: 0.5em;
+      border-radius: 0.3em;
+      background-image: linear-gradient(#eef 0%, #ddf 100%);
+    }
+  </style>
+
 </head>
 
 <body>
   <div id="app">
     <div class="container-fluid">
 
-      <div class="node" v-for="node of nodes">{{ node.name }}</div>
-      <button class="btn btn-primary btn-sm" @click="addNode">add node</button>
+      <div class="node" v-for="node of nodes">
+        {{ node.name }}
+      </div>
+
+      <div class="my-3">
+        <button class="btn btn-success btn-sm" @click="addNode">add node</button>
+        <button class="btn btn-info btn-sm" @click="addRelation">add relation</button>
+
+      </div>
+
+      <div class="relation" v-for="relation of relations">
+        {{ relation.name }}
+      </div>
 
     </div>
   </div>
@@ -34,9 +59,8 @@
     const App = {
       data() {
         return {
-          nodes: [
-            { name: 'node' },
-          ]
+          nodes: [],
+          relations: [],
         }
       },
 
@@ -44,6 +68,11 @@
         addNode() {
           this.nodes.push({ name: 'node' });
           console.log(this.nodes);
+        },
+
+        addRelation() {
+          this.relations.push({ name: 'relation' });
+          console.log(this.relation);
         }
       }
     }
