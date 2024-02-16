@@ -5,7 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Game Mapper</title>
-  <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
+  <link
+    href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII="
+    rel="icon" type="image/x-icon" />
 
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -31,19 +33,19 @@
   <div id="app">
     <div class="container-fluid">
 
-      <div class="node" v-for="node of nodes">
-        {{ node.name }}
+      <ul class="node-list">
+        <li class="node" v-for="node of nodes">
+          {{ node }}
+        </li>
+      </ul>
+      <div class="mt-2">
+        <div class="input-group">
+          <input type="text" class="form-control" v-model="baseId">
+          <button class="btn btn-sm btn-primary" @click="addNode">Add node</button>
+        </div>
       </div>
 
-      <div class="my-3">
-        <button class="btn btn-success btn-sm" @click="addNode">add node</button>
-        <button class="btn btn-info btn-sm" @click="addRelation">add relation</button>
 
-      </div>
-
-      <div class="relation" v-for="relation of relations">
-        {{ relation.name }}
-      </div>
 
     </div>
   </div>
@@ -59,20 +61,28 @@
     const App = {
       data() {
         return {
-          nodes: [],
-          relations: [],
+          nodes: [
+            { id: 'initial' }
+          ],
+
+          baseId: 'node',
         }
+      },
+
+      mounted() {
+        console.log(this.nodes);
       },
 
       methods: {
         addNode() {
-          this.nodes.push({ name: 'node' });
+          const newNodeId = this.generateUniqueId(this.baseId);
+          const newNode = { id: newNodeId };
+          this.nodes.push(newNode);
           console.log(this.nodes);
         },
 
-        addRelation() {
-          this.relations.push({ name: 'relation' });
-          console.log(this.relation);
+        generateUniqueId(baseId) {
+          return `${baseId}_${Math.random().toString(36).substr(2, 9)}`;
         }
       }
     }
