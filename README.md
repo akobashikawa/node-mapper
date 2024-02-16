@@ -1,4 +1,5 @@
-# Graph Mapper
+# Node Mapper
 
-- Mostrar un nodo
-- Agregar nodo
+- Show nodes
+- Show relation
+- Show related nodes
