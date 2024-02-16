@@ -23,7 +23,7 @@
     .relation {
       padding: 0.5em;
       border-radius: 0.3em;
-      background-image: linear-gradient(#eef 0%, #ddf 100%);
+      background-image: linear-gradient(#fee 0%, #fdd 100%);
     }
   </style>
 
@@ -38,14 +38,41 @@
           {{ node }}
         </li>
       </ul>
-      <div class="mt-2">
+
+      <div class="my-2">
         <div class="input-group">
-          <input type="text" class="form-control" v-model="baseId">
+          <input type="text" class="form-control" v-model="baseNodeId">
           <button class="btn btn-sm btn-primary" @click="addNode">Add node</button>
+        </div>
+
+        <div class="input-group">
+          <input type="text" class="form-control" v-model="baseRelationId">
+          <button class="btn btn-sm btn-primary" @click="addRelation">Add relation</button>
+        </div>
+
+        <div class="input-group">
+
+          <select class="form-select form-select-sm" v-model="selectedNodeId">
+            <option value="">--- selectedNode</option>
+            <option :value="node.id" v-for="node of nodes">{{ node.id }}</option>
+          </select>
+
+          <select class="form-select form-select-sm" v-model="selectedRelationId">
+            <option value="">--- selectedRelation</option>
+            <option :value="relation.id" v-for="relation of relations">{{ relation.id }}</option>
+          </select>
+
+          <input type="text" class="form-control" v-model="baseNodeId">
+
+          <button class="btn btn-sm btn-primary" @click="addRelatedNode">Add related node</button>
         </div>
       </div>
 
-
+      <ul class="relation-list">
+        <li class="relation" v-for="relation of relations">
+          {{ relation }}
+        </li>
+      </ul>
 
     </div>
   </div>
@@ -65,7 +92,15 @@
             { id: 'initial' }
           ],
 
-          baseId: 'node',
+          relations: [
+            { id: 'children' },
+            { id: 'parents' },
+          ],
+
+          baseNodeId: 'node',
+          baseRelationId: 'relation',
+          selectedNodeId: '',
+          selectedRelationId: '',
         }
       },
 
@@ -74,16 +109,41 @@
       },
 
       methods: {
+        generateUniqueId(baseId) {
+          return `${baseId}_${Math.random().toString(36).substr(2, 9)}`;
+        },
+
         addNode() {
-          const newNodeId = this.generateUniqueId(this.baseId);
+          const newNodeId = this.generateUniqueId(this.baseNodeId);
           const newNode = { id: newNodeId };
           this.nodes.push(newNode);
           console.log(this.nodes);
         },
 
-        generateUniqueId(baseId) {
-          return `${baseId}_${Math.random().toString(36).substr(2, 9)}`;
-        }
+        addRelation() {
+          const newRelationId = this.generateUniqueId(this.baseRelationId);
+          const newRelation = { id: newRelationId };
+          this.relations.push(newRelation);
+          console.log(this.relations);
+        },
+
+        addRelatedNode() {
+          const nodeId = this.selectedNodeId;
+          console.log(nodeId)
+          const relationId = this.selectedRelationId;
+          console.log(relationId)
+          const newNodeId = this.generateUniqueId(this.baseNodeId);
+          const nodeFound = this.nodes.find(node => nodeId === node.id);
+          console.log(nodeFound);
+          if (nodeFound) {
+            if (!nodeFound[relationId]) {
+              nodeFound[relationId] = [];
+            }
+            nodeFound[relationId].push(newNodeId);
+          }
+          console.log(this.nodes);
+        },
+
       }
     }
 
